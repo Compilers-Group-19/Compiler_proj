@@ -1,7 +1,7 @@
 # Mini Compiler (C++)
 
 Term project: a compiler for the class mini language, built in five phases.
-Group repository: COMPILER_GROUP_ONE
+Group repository: COMPILER_GROUP_19
 
 | Phase | Deliverable | Due | Status |
 |-------|-------------|-----|--------|
