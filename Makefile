@@ -1,3 +1,4 @@
+# owner: PS/CSC/23/0215
 CXX      := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -static
 SRC      := $(wildcard src/*.cpp)
