@@ -1,4 +1,4 @@
-# Owner: PS/CSC/23/0215 - Repo setup
+# Owner: PS/CSC/23/0215
 # Builds the scanner on Windows (PowerShell). Compiles every .cpp file in src\.
 #
 # Run from the project root:
