@@ -27,32 +27,24 @@ private:
     int errors_ = 0;
     std::vector<Token> tokens_;
 
-    // scanner_identifiers.cpp (Member 5)
     static const std::unordered_map<std::string, TokenType>& keywords();
 
-    // scanner_core.cpp (Member 3)
     bool atEnd() const { return pos_ >= src_.size(); }
     char peek(size_t offset = 0) const;
     char advance();
     bool match(char expected);
     void addToken(TokenType type, const std::string& lexeme, int line, int col);
 
-    // scanner_operators.cpp (Member 8)
     void scanToken();
 
-    // scanner_comments.cpp (Member 4)
     void skipWhitespaceAndComments();
 
-    // scanner_identifiers.cpp (Member 5)
     void identifier(int startLine, int startCol);
 
-    // scanner_numbers.cpp (Member 6)
     void number(int startLine, int startCol);
 
-    // scanner_strings.cpp (Member 7)
     void stringLiteral(int startLine, int startCol);
 
-    // scanner_errors.cpp (Member 9)
     void addError(const std::string& message, int line, int col);
 };
 
