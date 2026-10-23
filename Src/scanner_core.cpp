@@ -1,6 +1,4 @@
-// Owner: Member 3 - Scanner core
-// Constructor, low-level character helpers (with line/column tracking),
-// token creation, and the main scanning loop.
+// Owner: PS/CSC/23/0206
 
 #include "scanner.h"
 
