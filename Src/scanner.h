@@ -1,4 +1,4 @@
-// Owner: Member 3 - Scanner core
+// Owner: PS/CSC/23/0206 - Scanner core
 // Declares the Scanner class used by every scanner source file.
 // Each scanner_*.cpp file implements one group of these member functions.
 
