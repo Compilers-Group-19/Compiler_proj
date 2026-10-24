@@ -1,7 +1,4 @@
-// Owner: Member 9 - Error reporting
-// A lexical error does not stop the scanner. It is recorded as an ERROR token
-// (the lexeme holds the message) and counted, so one run can report several
-// errors. main.cpp prints them and sets the exit code.
+// Owner: PS/CSC/23/0209
 
 #include "scanner.h"
 
