@@ -1,7 +1,4 @@
-// Owner: Member 9 - Driver program
-// Reads a source file (or asks for a path when started with no argument),
-// runs the Scanner, prints the token table and a RESULT line.
-// Exit code: 0 = no lexical errors, 1 = lexical errors, 2 = file/usage error.
+// Owner: PS/CSC/23/0209
 
 #include <fstream>
 #include <iomanip>
