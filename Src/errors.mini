@@ -1,0 +1,5 @@
+int x = 10 @ 5;
+string s = "never closed;
+int y = 12abc;
+bool b = x & y;
+/* unterminated comment
