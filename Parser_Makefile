@@ -1,0 +1,40 @@
+CXX      := g++
+CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -static
+
+# scanner = main.cpp + the scanner files (everything except the parser files)
+# parser  = everything except the scanner's main.cpp
+ALL_SRC      := $(wildcard src/*.cpp)
+HDR          := $(wildcard src/*.h)
+PARSER_FILES := src/main_parser.cpp src/ast_printer.cpp $(wildcard src/parser*.cpp)
+SCANNER_SRC  := $(filter-out $(PARSER_FILES),$(ALL_SRC))
+PARSER_SRC   := $(filter-out src/main.cpp,$(ALL_SRC))
+
+# The parser program is built once its driver (src/main_parser.cpp) exists.
+TARGETS := scanner
+ifneq ($(wildcard src/main_parser.cpp),)
+TARGETS += parser
+endif
+
+all: $(TARGETS)
+
+scanner: $(SCANNER_SRC) $(HDR)
+	$(CXX) $(CXXFLAGS) -o $@ $(SCANNER_SRC)
+
+parser: $(PARSER_SRC) $(HDR)
+	$(CXX) $(CXXFLAGS) -o $@ $(PARSER_SRC)
+
+# Scanner tests (Phase 1). errors.mini is supposed to fail, hence the leading '-'.
+test: scanner
+	./scanner tests/sample.mini
+	-./scanner tests/errors.mini
+
+# Parser tests (Phase 2). parse_errors.mini is supposed to fail.
+test-parser: parser
+	./parser tests/sample.mini
+	./parser tests/parse_ok.mini
+	-./parser tests/parse_errors.mini
+
+clean:
+	rm -f scanner parser scanner.exe parser.exe
+
+.PHONY: all test test-parser clean
