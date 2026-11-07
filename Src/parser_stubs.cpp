@@ -1,4 +1,4 @@
-// parser_stubs.cpp  -- TEMPORARY FILE (created in Part 4, shrinks in Parts 5 to 9)
+// PS/CSC/23/0210
 //
 // The parser is written by several people, one part after another. Until every
 // grammar rule exists, this file supplies placeholder versions of the rules
@@ -8,44 +8,8 @@
 // Each part's folder contains a new copy of this file with that part's
 // placeholders removed: copy it over the old one, do not edit it by hand.
 // After Part 9 nothing is left in it and it can be deleted.
-// created by index PS/CSC/23/0214
 
 #include "parser.h"
-
-// ---- replaced in Part 6 (src/parser_expressions.cpp)
-ExprPtr Parser::expression() {
-    throw makeError(peek(), "expression() is not written yet (Part 6)", false);
-}
-
-// ---- replaced in Part 6 (src/parser_expressions.cpp)
-ExprPtr Parser::assignment() {
-    throw makeError(peek(), "assignment() is not written yet (Part 6)", false);
-}
-
-// ---- replaced in Part 6 (src/parser_expressions.cpp)
-ExprPtr Parser::binary(size_t) {
-    throw makeError(peek(), "binary() is not written yet (Part 6)", false);
-}
-
-// ---- replaced in Part 7 (src/parser_statements.cpp)
-StmtPtr Parser::statement() {
-    throw makeError(peek(), "statement() is not written yet (Part 7)", false);
-}
-
-// ---- replaced in Part 7 (src/parser_statements.cpp)
-StmtPtr Parser::varDecl() {
-    throw makeError(peek(), "varDecl() is not written yet (Part 7)", false);
-}
-
-// ---- replaced in Part 7 (src/parser_statements.cpp)
-std::unique_ptr<BlockStmt> Parser::block() {
-    throw makeError(peek(), "block() is not written yet (Part 7)", false);
-}
-
-// ---- replaced in Part 7 (src/parser_statements.cpp)
-StmtPtr Parser::exprStmt() {
-    throw makeError(peek(), "exprStmt() is not written yet (Part 7)", false);
-}
 
 // ---- replaced in Part 8 (src/parser_control.cpp)
 StmtPtr Parser::ifStmt() {
