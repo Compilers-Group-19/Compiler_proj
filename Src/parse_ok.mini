@@ -1,0 +1,41 @@
+// Parser test: exercises every grammar rule
+func void greet(string name) {
+    print("Hello, ", name);
+}
+
+func float average(int a, int b) {
+    return (a + b) / 2.0;
+}
+
+func bool isEven(int n) {
+    return n % 2 == 0;
+}
+
+int total = 0;
+int nums[5];
+float ratio = 1.5 * -2 + 3;
+bool flag = !true || false && 1 < 2;
+
+read(total);
+read(nums[2]);
+nums[0] = nums[1] = 7;
+
+for (int i = 0; i < 5; i = i + 1) {
+    total = total + nums[i];
+}
+
+for (;;) {
+    return;
+}
+
+if (total > 10) {
+    print("big");
+} else if (total == 10) {
+    print("exact");
+} else {
+    greet("small");
+}
+
+while (isEven(total) && total >= 0) total = total - 2;
+
+print(average(total, 4), (1 + 2) * 3);
