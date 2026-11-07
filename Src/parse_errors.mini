@@ -1,0 +1,11 @@
+int x = ;
+int y = 5
+print(y);
+if (x > 1 {
+    x = 1;
+}
+x + = 3;
+3 = x;
+void z;
+func int f(int a, b) { return a; }
+while (x < 3) { x = x + 1;
