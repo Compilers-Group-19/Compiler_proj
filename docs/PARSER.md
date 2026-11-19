@@ -169,6 +169,14 @@ Program
    it cannot loop forever.
 3. After an error at the top level, a leftover `}` is dropped quietly instead of
    producing a second, confusing error.
+4. After an error in a function header (`func int f(int a, b) { ... }`),
+   `skipFunction()` skips the whole function, body included, so its statements
+   are not parsed as top-level code and reported again.
+5. A `func` inside a block is taken as a missing `}`: the block ends there, the
+   error `Expected '}' to close block, found 'func'` is reported once, and the
+   next function is parsed normally.
+6. Nesting (expressions and statements together) deeper than 200 levels is
+   reported as `Program is nested too deeply` instead of overflowing the stack.
 
 Messages have the form
 `Syntax error at line 4, col 11: Expected ')' after if condition, found '{'`.
@@ -182,6 +190,8 @@ Besides the usual "Expected X" messages there are specific ones:
 | `Array size must be greater than 0` / `Array size is out of range` | `int a[0];` |
 | `Array declarations cannot have an initializer` | `int a[3] = 1;` |
 | `Integer literal is out of range` / `Float literal is out of range` | number too large |
+| `Expected '}' to close block, found 'func'` | a function is missing its closing `}` |
+| `Program is nested too deeply (more than 200 levels)` | e.g. 300 nested parentheses |
 
 ## Running
 
@@ -205,7 +215,10 @@ run these checks after building:
 | scanner | `errors.mini` | 25 tokens, 5 lexical errors, exit 1 |
 | parser | `sample.mini` | tree, `RESULT: SUCCESS`, exit 0 |
 | parser | `parse_ok.mini` | every grammar rule parses, exit 0 |
-| parser | `parse_errors.mini` | 9 syntax errors reported in one run, exit 1 |
+| parser | `parse_errors.mini` | 8 syntax errors reported in one run, exit 1 |
+| parser | `parse_recovery.mini` | 2 syntax errors, each reported once, exit 1 |
+| parser | `parse_edge_ok.mini` | byte order mark and the smallest integer parse, exit 0 |
+| parser | `too_deep.mini` | "nested too deeply" error instead of a crash, exit 1 |
 | parser | `errors.mini` | 5 lexical errors listed, parsing not attempted, exit 1 |
 
 ## Source files
@@ -235,3 +248,13 @@ run these checks after building:
 The parser only checks structure. It does not check that variables are declared,
 that types match, or that `return` agrees with the function's type; that is the
 job of Phase 3 (semantic analysis).
+
+Things the grammar accepts that Phase 3 must reject:
+- `return` outside a function (a top-level `return;` parses).
+- A declaration as the whole body of an `if`/`while`/`for`: `if (x) int y = 2;`
+- Comparisons of the wrong type, e.g. `1 < 2 < 3` compares a `bool` with an `int`.
+- Undeclared names, wrong argument counts, and return-type mismatches.
+
+A minus sign directly in front of an integer literal is folded into the literal
+(`-5` is `Int -5`, not `Unary -` of `Int 5`), so the smallest integer
+`-9223372036854775808` can be written.

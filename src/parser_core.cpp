@@ -70,6 +70,25 @@ void Parser::report(const ParseError& e) {
                       std::to_string(e.token.column) + ": " + e.message);
 }
 
+Parser::DepthGuard::DepthGuard(Parser& p, const Token& at) : parser(p) {
+    if (++parser.depth_ > kMaxDepth) {
+        parser.depth_--;
+        throw parser.makeError(at, "Program is nested too deeply (more than " +
+                                       std::to_string(kMaxDepth) + " levels)", false);
+    }
+}
+
+void Parser::skipFunction() {
+    while (!atEnd() && !check(TokenType::LBRACE) && !check(TokenType::KW_FUNC)) advance();
+    if (!check(TokenType::LBRACE)) return;
+    int depth = 0;
+    while (!atEnd()) {
+        TokenType t = advance().type;
+        if (t == TokenType::LBRACE) depth++;
+        else if (t == TokenType::RBRACE && --depth == 0) return;
+    }
+}
+
 // Panic-mode recovery: skip tokens until a likely statement boundary so that
 // several syntax errors can be reported in one run.
 void Parser::synchronize() {

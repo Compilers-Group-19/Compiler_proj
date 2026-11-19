@@ -1,5 +1,5 @@
-# owner: PS/CSC/23/0213
 #!/usr/bin/env bash
+# owner: PS/CSC/23/0213
 # Runs the scanner and the parser on the test programs and checks the exit
 # code and the summary line of each run (Linux, macOS, Git Bash, MSYS2).
 # Build first with `make` (or .\build.ps1 on Windows), then run:
@@ -36,7 +36,10 @@ check "$SCANNER" sample.mini       0 "82 tokens, 0 lexical error(s)"
 check "$SCANNER" errors.mini       1 "25 tokens, 5 lexical error(s)"
 check "$PARSER"  sample.mini       0 "RESULT: SUCCESS"
 check "$PARSER"  parse_ok.mini     0 "RESULT: SUCCESS"
-check "$PARSER"  parse_errors.mini 1 "9 syntax error(s)"
+check "$PARSER"  parse_errors.mini 1 "8 syntax error(s)"
+check "$PARSER"  parse_recovery.mini 1 "2 syntax error(s)"
+check "$PARSER"  parse_edge_ok.mini 0 "Int -9223372036854775808"
+check "$PARSER"  too_deep.mini     1 "nested too deeply"
 check "$PARSER"  errors.mini       1 "5 lexical error(s)"
 
 if [ "$failures" -eq 0 ]; then

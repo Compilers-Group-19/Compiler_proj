@@ -1,3 +1,4 @@
+# owner: PS/CSC/23/0215
 CXX      := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -static
 
@@ -32,9 +33,14 @@ test: scanner
 test-parser: parser
 	./parser tests/sample.mini
 	./parser tests/parse_ok.mini
+	./parser tests/parse_edge_ok.mini
 	-./parser tests/parse_errors.mini
+	-./parser tests/parse_recovery.mini
+
+check: scanner parser
+	bash tests/run_tests.sh
 
 clean:
 	rm -f scanner parser scanner.exe parser.exe
 
-.PHONY: all test test-parser clean
+.PHONY: all test test-parser check clean

@@ -17,6 +17,17 @@
 using namespace parser_util;
 
 ExprPtr Parser::unary() {
+    DepthGuard guard(*this, peek());
+    if (check(TokenType::MINUS) && pos_ + 1 < tokens_.size() &&
+        tokens_[pos_ + 1].type == TokenType::INT_LITERAL) {
+        Token minus = advance();
+        Token lit = advance();
+        try {
+            return node<IntLiteral>(minus, std::stoll("-" + lit.lexeme));
+        } catch (const std::exception&) {
+            throw makeError(lit, "Integer literal is out of range", false);
+        }
+    }
     if (match(TokenType::NOT) || match(TokenType::MINUS)) {
         Token op = previous();
         ExprPtr operand = unary();

@@ -36,8 +36,12 @@ std::unique_ptr<Program> Parser::parse() {
             recovering_ = false;
         } catch (const ParseError& e) {
             report(e);
-            recovering_ = true;
-            synchronize();
+            if (tokens_[start].type == TokenType::KW_FUNC && !check(TokenType::KW_FUNC)) {
+                skipFunction();
+            } else {
+                recovering_ = true;
+                synchronize();
+            }
             if (pos_ == start && !atEnd()) advance();  // always make progress
         }
     }

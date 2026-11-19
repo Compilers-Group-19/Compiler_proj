@@ -67,6 +67,17 @@ private:
     size_t pos_ = 0;
     std::vector<std::string> errors_;
     bool recovering_ = false;  // true right after a top-level syntax error
+    int depth_ = 0;
+
+    static constexpr int kMaxDepth = 200;
+
+    struct DepthGuard {
+        Parser& parser;
+        DepthGuard(Parser& p, const Token& at);
+        ~DepthGuard() { parser.depth_--; }
+        DepthGuard(const DepthGuard&) = delete;
+        DepthGuard& operator=(const DepthGuard&) = delete;
+    };
 
     // token helpers
     const Token& peek() const { return tokens_[pos_]; }
@@ -82,6 +93,7 @@ private:
     ParseError makeError(const Token& at, const std::string& message, bool showFound = true) const;
     void report(const ParseError& e);
     void synchronize();
+    void skipFunction();
 
     // declarations and statements
     StmtPtr declaration();

@@ -41,6 +41,8 @@ std::vector<Token> Scanner::scanTokens() {
     col_ = 1;
     errors_ = 0;
 
+    if (src_.compare(0, 3, "\xEF\xBB\xBF") == 0) pos_ = 3;
+
     while (true) {
         skipWhitespaceAndComments();
         if (atEnd()) break;

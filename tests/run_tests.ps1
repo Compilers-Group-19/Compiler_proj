@@ -33,7 +33,10 @@ Check $scanner "sample.mini"       0         "82 tokens, 0 lexical error(s)"
 Check $scanner "errors.mini"       1         "25 tokens, 5 lexical error(s)"
 Check $parser  "sample.mini"       0         "RESULT: SUCCESS"
 Check $parser  "parse_ok.mini"     0         "RESULT: SUCCESS"
-Check $parser  "parse_errors.mini" 1         "9 syntax error(s)"
+Check $parser  "parse_errors.mini" 1         "8 syntax error(s)"
+Check $parser  "parse_recovery.mini" 1       "2 syntax error(s)"
+Check $parser  "parse_edge_ok.mini" 0        "Int -9223372036854775808"
+Check $parser  "too_deep.mini"     1         "nested too deeply"
 Check $parser  "errors.mini"       1         "5 lexical error(s)"
 
 if ($script:failures -eq 0) {

@@ -20,6 +20,7 @@
 using namespace parser_util;
 
 StmtPtr Parser::statement() {
+    DepthGuard guard(*this, peek());
     switch (peek().type) {
         case TokenType::KW_INT:
         case TokenType::KW_FLOAT:
@@ -71,11 +72,12 @@ std::unique_ptr<BlockStmt> Parser::block() {
     Token open = consume(TokenType::LBRACE, "Expected '{'");
     auto blk = node<BlockStmt>(open);
 
-    while (!check(TokenType::RBRACE) && !atEnd()) {
+    while (!check(TokenType::RBRACE) && !check(TokenType::KW_FUNC) && !atEnd()) {
         size_t start = pos_;
         try {
             blk->statements.push_back(statement());
         } catch (const ParseError& e) {
+            if (check(TokenType::KW_FUNC)) throw;
             report(e);
             synchronize();
             if (pos_ == start && !atEnd() && !check(TokenType::RBRACE)) advance();
