@@ -1,0 +1,45 @@
+// Run test: arrays.
+// Expected output: run_arrays.expected
+int data[8];
+for (int i = 0; i < 8; i = i + 1) {
+    data[i] = (i * 37 + 11) % 50;
+}
+print("before: ", data[0], " ", data[1], " ", data[2], " ", data[3], " ",
+      data[4], " ", data[5], " ", data[6], " ", data[7]);
+
+// Bubble sort
+for (int i = 0; i < 7; i = i + 1) {
+    for (int j = 0; j < 7 - i; j = j + 1) {
+        if (data[j] > data[j + 1]) {
+            int tmp = data[j];
+            data[j] = data[j + 1];
+            data[j + 1] = tmp;
+        }
+    }
+}
+print("after: ", data[0], " ", data[1], " ", data[2], " ", data[3], " ",
+      data[4], " ", data[5], " ", data[6], " ", data[7]);
+
+// A function using a global array.
+func int sum() {
+    int s = 0;
+    for (int i = 0; i < 8; i = i + 1) s = s + data[i];
+    return s;
+}
+print("sum = ", sum());
+
+// A local array; two loops in one function, each with its own i.
+func int squaresTotal(int n) {
+    int sq[10];
+    for (int i = 0; i < n; i = i + 1) sq[i] = i * i;
+    int t = 0;
+    for (int i = 0; i < n; i = i + 1) t = t + sq[i];
+    return t;
+}
+print("squaresTotal(5) = ", squaresTotal(5));
+
+float temps[3];
+temps[0] = 1.5;
+temps[1] = 2;
+temps[2] = -0.5;
+print("average temperature = ", (temps[0] + temps[1] + temps[2]) / 3);
