@@ -1,0 +1,15 @@
+// Run test: read. The input comes from run_read.input.
+// Expected output: run_read.expected
+int n;
+read(n);
+int values[5];
+for (int i = 0; i < n; i = i + 1) read(values[i]);
+float scale;
+read(scale);
+string name;
+read(name);
+bool flag;
+read(flag);
+int total = 0;
+for (int i = 0; i < n; i = i + 1) total = total + values[i];
+print(name, ": total = ", total, ", scaled = ", total * scale, ", flag = ", flag);
