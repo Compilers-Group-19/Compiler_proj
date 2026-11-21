@@ -1,8 +1,20 @@
 # Mini Compiler (C++)
 
 Term project: a compiler for the class mini language, built in five phases.
-<!-- owner: PS/CSC/23/0215 -->
+
 Group repository: COMPILER_GROUP_19
+Group Members:
+
+PS/CSC/23/0206
+PS/CSC/23/0207
+PS/CSC/23/0208
+PS/CSC/23/0209
+PS/CSC/23/0210
+PS/CSC/23/0211
+PS/CSC/23/0212
+PS/CSC/23/0213
+PS/CSC/23/0214
+PS/CSC/23/0215
 
 | Phase | Deliverable | Due | Status |
 |-------|-------------|-----|--------|
