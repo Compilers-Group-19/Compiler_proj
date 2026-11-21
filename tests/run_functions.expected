@@ -1,0 +1,14 @@
+fact(10) = 3628800
+fib(15) = 610
+Hello, group 19!
+average(3, 4) = 3.5
+half(5) = 2.5
+power of two above 100 = 128
+isEven(10) = true, isEven(7) = false
+before = 1, counter = 1
+bump() + bump() * 10 = 32
+false && noisy:
+true || noisy:
+true && noisy:
+  evaluated C
+results: false true true

@@ -1,0 +1,66 @@
+// Run test: functions, recursion, globals and evaluation order.
+// Expected output: run_functions.expected
+
+// A function can be called before the line where it is written.
+print("fact(10) = ", fact(10));
+print("fib(15) = ", fib(15));
+
+func int fact(int n) {
+    if (n <= 1) return 1;
+    return n * fact(n - 1);
+}
+
+func int fib(int n) {
+    if (n < 2) { return n; }
+    return fib(n - 1) + fib(n - 2);
+}
+
+func float average(int a, int b) {
+    return (a + b) / 2.0;
+}
+
+func float half(float v) { return v / 2; }
+
+func void greet(string name) {
+    print("Hello, ", name, "!");
+}
+
+// No return after the loop is needed: while (true) never ends by itself.
+func int firstPowerOfTwoAbove(int limit) {
+    int p = 1;
+    while (true) {
+        p = p * 2;
+        if (p > limit) return p;
+    }
+}
+
+func bool isEven(int n) { return n % 2 == 0; }
+
+greet("group 19");
+print("average(3, 4) = ", average(3, 4));
+print("half(5) = ", half(5));
+print("power of two above 100 = ", firstPowerOfTwoAbove(100));
+print("isEven(10) = ", isEven(10), ", isEven(7) = ", isEven(7));
+
+// A function that changes a global variable.
+int counter = 0;
+func int bump() {
+    counter = counter + 1;
+    return counter;
+}
+int before = counter + bump();   // counter is read before the call: 0 + 1
+print("before = ", before, ", counter = ", counter);
+print("bump() + bump() * 10 = ", bump() + bump() * 10);   // 2 + 3 * 10
+
+// && and || skip their right side when the answer is already known.
+func bool noisy(string label, bool value) {
+    print("  evaluated ", label);
+    return value;
+}
+print("false && noisy:");
+bool r1 = false && noisy("A", true);
+print("true || noisy:");
+bool r2 = true || noisy("B", false);
+print("true && noisy:");
+bool r3 = true && noisy("C", true);
+print("results: ", r1, " ", r2, " ", r3);
