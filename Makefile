@@ -16,10 +16,6 @@ ifneq ($(wildcard src/main_parser.cpp),)
 TARGETS += parser
 endif
 
-# Phase 3 lives in subfolders (src/semantic, src/ir, src/driver), which the
-# scanner and parser builds above never look at. The compiler program is
-# built only once every Phase 3 file is in the repository, so the parts can
-# be pushed in any order without breaking the build.
 PHASE3_FILES := src/semantic/types.h \
                 src/semantic/symbol_table.h \
                 src/semantic/symbol_table.cpp \
@@ -67,13 +63,11 @@ test-parser: parser
 	-./parser tests/parse_errors.mini
 	-./parser tests/parse_recovery.mini
 
-# Phase 3 tests. sem_errors.mini is supposed to fail.
 test-compiler: compiler
 	./compiler tests/sample.mini
 	./compiler --run tests/run_functions.mini
 	-./compiler tests/sem_errors.mini
 
-# Every check, with expected results (exit code = number of failures).
 check: $(TARGETS)
 	bash tests/run_tests.sh
 

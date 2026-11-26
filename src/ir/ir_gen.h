@@ -27,13 +27,12 @@ public:
 private:
     const SemanticInfo& info_;
     IrProgram program_;
-    IrFunction* fn_ = nullptr;           // function being generated
-    const Symbol* fnSymbol_ = nullptr;   // its symbol (null for main)
-    int tempCount_ = 0;                  // t1, t2, ... (numbered per function)
-    int labelCount_ = 0;                 // L1, L2, ... (numbered per function)
-    int line_ = 0;                       // source line of what is being generated
+    IrFunction* fn_ = nullptr;
+    const Symbol* fnSymbol_ = nullptr;
+    int tempCount_ = 0;
+    int labelCount_ = 0;
+    int line_ = 0;
 
-    // ---- ir_gen_stmts.cpp (Part 7)
     Operand newTemp(IrType type);
     std::string newLabel();
     void emit(Instr in);
@@ -51,7 +50,6 @@ private:
     void genPrint(const PrintStmt& s);
     void genRead(const ReadStmt& s);
 
-    // ---- ir_gen_exprs.cpp (Part 8)
     Operand genExpr(const Expr* e);
     Operand genExprAs(const Expr* e, IrType wanted);
     Operand convert(const Operand& o, IrType to);

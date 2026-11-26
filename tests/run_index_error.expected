@@ -1,4 +1,4 @@
 stored 0
 stored 1
 stored 2
-Runtime error at line 6: array index 3 is out of range for 'a' (size 3)
+Runtime error at line 4: array index 3 is out of range for 'a' (size 3)

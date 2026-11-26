@@ -1,2 +1,2 @@
 50000 nested calls are fine
-Runtime error at line 7: stack overflow: more than 100000 nested calls (endless recursion?)
+Runtime error at line 5: stack overflow: more than 100000 nested calls (endless recursion?)

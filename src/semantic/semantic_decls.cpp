@@ -1,14 +1,10 @@
 // Owner: PS/CSC/23/0206  (Phase 3, Part 3)
-// Variable declarations, function bodies, and the "every path returns" check.
 
 #include "semantic.h"
 
 void SemanticAnalyzer::checkVarDecl(const VarDecl& d) {
     Type declared = d.arraySize >= 0 ? Type::arrayOf(d.type, d.arraySize) : Type::of(d.type);
 
-    // The initializer is checked before the name is declared, so
-    // "int x = x;" is an error (x is not declared yet) instead of reading
-    // an uninitialized value.
     if (d.init) {
         Type value = valueOf(d.init.get());
         if (!assignable(declared, value)) {
@@ -29,7 +25,7 @@ void SemanticAnalyzer::checkVarDecl(const VarDecl& d) {
         const Symbol* first = symbols_.lookupCurrent(d.name);
         std::string what = first->isFunction() ? "a function" : "already declared in this scope";
         error(d, "'" + d.name + "' is " + what + " (line " + std::to_string(first->line) + ")");
-        declaredSym = symbols_.adopt(s);  // keep going with the new declaration
+        declaredSym = symbols_.adopt(s);
     }
     info_.symbols[&d] = declaredSym;
 }
@@ -40,7 +36,7 @@ void SemanticAnalyzer::checkFunction(const FuncDecl& f) {
     currentFunction_ = fn;
 
     symbols_.beginFunction();
-    symbols_.enterScope();  // parameters and the body's own declarations share this scope
+    symbols_.enterScope();
 
     std::vector<const Symbol*>& params = info_.params[&f];
     for (const Param& p : f.params) {
@@ -58,7 +54,7 @@ void SemanticAnalyzer::checkFunction(const FuncDecl& f) {
         params.push_back(declared);
     }
 
-    checkBlock(*f.body, /*newScope=*/false);
+    checkBlock(*f.body, false);
 
     if (!fn->type.isVoid() && !alwaysReturns(f.body.get())) {
         error(f, "function '" + f.name + "' must return " + aType(fn->type) +
@@ -70,9 +66,6 @@ void SemanticAnalyzer::checkFunction(const FuncDecl& f) {
     currentFunction_ = outer;
 }
 
-// True when running `s` can never finish normally: it always reaches a
-// return (or loops forever). Used to find non-void functions that can end
-// without returning a value.
 bool SemanticAnalyzer::alwaysReturns(const Stmt* s) const {
     if (!s) return false;
     switch (s->kind) {
@@ -88,13 +81,11 @@ bool SemanticAnalyzer::alwaysReturns(const Stmt* s) const {
             return x->elseBranch && alwaysReturns(x->thenBranch.get()) && alwaysReturns(x->elseBranch.get());
         }
         case StmtKind::WHILE: {
-            // while (true) never ends normally (the language has no 'break').
             auto* x = static_cast<const WhileStmt*>(s);
             return x->condition->kind == ExprKind::BOOL_LIT &&
                    static_cast<const BoolLiteral*>(x->condition.get())->value;
         }
         case StmtKind::FOR: {
-            // for (...; ; ...) and for (...; true; ...) never end normally.
             auto* x = static_cast<const ForStmt*>(s);
             if (!x->condition) return true;
             return x->condition->kind == ExprKind::BOOL_LIT &&

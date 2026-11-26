@@ -1,5 +1,3 @@
-// Run test: endless recursion is a runtime error, not a crash (exit code 3).
-// Expected output: run_overflow.expected
 func int deep(int n) {
     if (n == 50000) {
         print("50000 nested calls are fine");

@@ -1,11 +1,5 @@
 # Owner: PS/CSC/23/0215
-# Builds the project on Windows (PowerShell).
-#
-#   scanner.exe  - Phase 1: prints the token stream
-#   parser.exe   - Phase 2: scanner + parser, prints the syntax tree
-#                  (built automatically once src\main_parser.cpp exists)
-#   compiler.exe - Phase 3: scanner + parser + semantic analysis + IR
-#                  (built automatically once every Phase 3 file exists)
+# Builds the scanner, parser and compiler on Windows (PowerShell). Compiles every .cpp file in src\.
 #
 # Run from the project root:
 #   .\build.ps1
@@ -20,14 +14,11 @@ if ($all.Count -eq 0) {
     exit 2
 }
 
-# Files that belong to the parser program only.
 function IsParserFile($f) {
     return ($f.Name -eq 'main_parser.cpp') -or ($f.Name -eq 'ast_printer.cpp') -or ($f.Name -like 'parser*.cpp')
 }
 
-# scanner.exe = main.cpp + the scanner files (everything except the parser files)
 $scannerSources = @($all | Where-Object { -not (IsParserFile $_) } | ForEach-Object { $_.FullName })
-# parser.exe = everything except the scanner's main.cpp
 $parserSources = @($all | Where-Object { $_.Name -ne 'main.cpp' } | ForEach-Object { $_.FullName })
 
 function Build($output, $sources) {
@@ -47,10 +38,6 @@ if (Test-Path (Join-Path $src "main_parser.cpp")) {
     $ok = $ok -and $parserOk
 }
 
-# Phase 3 lives in subfolders (src\semantic, src\ir, src\driver), which the
-# scanner and parser builds above never look at. compiler.exe is built only
-# once every Phase 3 file is in the repository, so the parts can be pushed in
-# any order without breaking the build.
 $phase3Files = @(
     "src\semantic\types.h",
     "src\semantic\symbol_table.h",
@@ -73,8 +60,6 @@ $missing = @($phase3Files | Where-Object { -not (Test-Path (Join-Path $PSScriptR
 $compilerExe = Join-Path $PSScriptRoot "compiler.exe"
 
 if ($missing.Count -eq 0) {
-    # compiler.exe = everything except the scanner's and the parser's main(),
-    # plus every .cpp file in the Phase 3 folders.
     $phase3Sources = @(Get-ChildItem -Path (Join-Path $src "semantic"), (Join-Path $src "ir"), (Join-Path $src "driver") -Filter *.cpp | ForEach-Object { $_.FullName })
     $compilerSources = @($all | Where-Object { $_.Name -ne 'main.cpp' -and $_.Name -ne 'main_parser.cpp' } | ForEach-Object { $_.FullName }) + $phase3Sources
     $compilerOk = Build "compiler.exe" $compilerSources

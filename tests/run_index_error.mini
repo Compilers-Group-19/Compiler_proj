@@ -1,5 +1,3 @@
-// Run test: a runtime error stops the program (exit code 3).
-// Expected output: run_index_error.expected
 int a[3];
 int i = 0;
 while (i <= 3) {

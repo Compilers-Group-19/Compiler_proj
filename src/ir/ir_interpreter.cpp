@@ -1,12 +1,4 @@
 // Owner: PS/CSC/23/0209 (Phase 3, Part 9)
-// The IR interpreter.
-//
-// Calls do not use C++ recursion: every call pushes a Frame on an explicit
-// stack, so even very deep recursion in a mini program can not crash the
-// interpreter (it is reported as a stack overflow instead).
-//
-// Runtime errors: array index out of range, division by zero, bad input
-// for read, too many nested calls.
 
 #include "ir_interpreter.h"
 #include "../ast.h"
@@ -37,8 +29,6 @@ struct RuntimeError {
     std::string message;
 };
 
-// int arithmetic wraps around on overflow (like the machine does) instead of
-// being undefined behaviour in C++.
 long long wrapAdd(long long a, long long b) {
     return static_cast<long long>(static_cast<uint64_t>(a) + static_cast<uint64_t>(b));
 }
@@ -70,10 +60,10 @@ std::string text(const Value& v) {
 
 struct Frame {
     const IrFunction* fn = nullptr;
-    size_t pc = 0;                                            // next instruction
-    std::unordered_map<std::string, Value> vars;              // variables, parameters, temporaries
+    size_t pc = 0;
+    std::unordered_map<std::string, Value> vars;
     std::unordered_map<std::string, std::vector<Value>> arrays;
-    Operand returnTo;                                         // where the caller wants the result
+    Operand returnTo;
 };
 
 class Machine {
@@ -96,7 +86,7 @@ public:
         while (!stack_.empty()) {
             Frame& f = stack_.back();
             if (f.pc >= f.fn->code.size()) {
-                if (stack_.size() == 1) return;  // end of the top-level code
+                if (stack_.size() == 1) return;
                 fail(f.fn->code.empty() ? 0 : f.fn->code.back().line,
                      "function '" + f.fn->name + "' ended without returning a value");
             }
@@ -115,7 +105,7 @@ private:
     std::unordered_map<std::string, Value> globals_;
     std::unordered_map<std::string, std::vector<Value>> globalArrays_;
     std::vector<Frame> stack_;
-    std::vector<Value> args_;  // pushed by PARAM, taken by CALL
+    std::vector<Value> args_;
     int line_ = 0;
 
     [[noreturn]] void fail(int line, const std::string& message) {
@@ -186,7 +176,7 @@ private:
                 case TokenType::SLASH:
                 case TokenType::PERCENT:
                     if (b.i == 0) fail("division by zero");
-                    if (b.i == -1) {  // avoids the one overflowing case, INT_MIN / -1
+                    if (b.i == -1) {
                         r.i = op == TokenType::SLASH ? wrapSub(0, a.i) : 0;
                         return r;
                     }
@@ -311,7 +301,7 @@ private:
         for (size_t i = 0; i < n && i < fn->params.size(); i++)
             callee.vars[fn->params[i].name] = args_[args_.size() - n + i];
         args_.resize(args_.size() - n);
-        stack_.push_back(std::move(callee));  // invalidates references into stack_
+        stack_.push_back(std::move(callee));
     }
 
     void ret(const Instr& in) {
@@ -322,7 +312,7 @@ private:
     }
 };
 
-}  // namespace
+}
 
 bool IrInterpreter::run() {
     error_.clear();

@@ -122,8 +122,6 @@ namespace
         return s;
     }
 
-    // The destination of an instruction: temporaries show their type where
-    // they get their value, e.g. "t1:int".
     std::string dstText(const Operand &o)
     {
         if (o.kind == Operand::Kind::TEMP)
@@ -206,7 +204,7 @@ namespace
         os << "end " << (isMain ? "main" : f.name) << "\n";
     }
 
-} // namespace
+}
 
 std::string operandText(const Operand &o)
 {

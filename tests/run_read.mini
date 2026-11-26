@@ -1,5 +1,3 @@
-// Run test: read. The input comes from run_read.input.
-// Expected output: run_read.expected
 int n;
 read(n);
 int values[5];

@@ -19,24 +19,23 @@ enum class IrType
 
 const char *irTypeName(IrType t);
 
-// One input or output of an instruction.
 struct Operand
 {
     enum class Kind
     {
-        NONE, // not used
-        TEMP, // compiler-made temporary: t1, t2, ...
-        VAR,  // a variable or parameter of the program
+        NONE,
+        TEMP,
+        VAR,
         INT,
         FLOAT,
         BOOL,
-        STRING // constants
+        STRING
     };
 
     Kind kind = Kind::NONE;
     IrType type = IrType::VOID;
-    std::string name;    // TEMP and VAR
-    bool global = false; // VAR: a global variable (printed as @name)
+    std::string name;
+    bool global = false;
     long long intValue = 0;
     double floatValue = 0;
     bool boolValue = false;
@@ -59,46 +58,45 @@ struct Operand
 
 enum class Op
 {
-    LABEL,        // label:
-    COPY,         // dst = a
-    BINARY,       // dst = a <oper> b        (+ - * / % == != < <= > >=)
-    UNARY,        // dst = <oper> a          (- or !)
-    INT_TO_FLOAT, // dst = (float) a
-    JUMP,         // goto label
-    IF_FALSE,     // ifFalse a goto label
-    IF_TRUE,      // if a goto label
-    PARAM,        // param a                 (pushes one argument)
-    CALL,         // dst = call label, count (dst is NONE for a void call)
-    RETURN,       // return [a]
-    ARRAY,        // array dst[count]        (creates the array, all elements 0)
-    LOAD,         // dst = a[b]
-    STORE,        // dst[a] = b
-    PRINT,        // print a                 (no newline)
-    PRINTLN,      // println                 (newline at the end of a print statement)
-    READ          // read dst
+    LABEL,
+    COPY,
+    BINARY,
+    UNARY,
+    INT_TO_FLOAT,
+    JUMP,
+    IF_FALSE,
+    IF_TRUE,
+    PARAM,
+    CALL,
+    RETURN,
+    ARRAY,
+    LOAD,
+    STORE,
+    PRINT,
+    PRINTLN,
+    READ
 };
 
 struct Instr
 {
     Op op = Op::LABEL;
     Operand dst, a, b;
-    TokenType oper = TokenType::PLUS; // BINARY / UNARY
-    std::string label;                // LABEL / JUMP / IF_*: the label; CALL: the function
-    int count = 0;                    // CALL: number of arguments; ARRAY: number of elements
-    int line = 0;                     // source line, for runtime error messages
+    TokenType oper = TokenType::PLUS;
+    std::string label;
+    int count = 0;
+    int line = 0;
 };
 
-// A variable that belongs to a function (or a global variable).
 struct IrVar
 {
     std::string name;
     IrType type = IrType::INT;
-    int arraySize = -1; // number of elements for arrays, -1 otherwise
+    int arraySize = -1;
 };
 
 struct IrFunction
 {
-    std::string name; // "main" for the top-level code
+    std::string name;
     IrType returnType = IrType::VOID;
     std::vector<IrVar> params;
     std::vector<IrVar> locals;
@@ -109,7 +107,7 @@ struct IrProgram
 {
     std::vector<IrVar> globals;
     std::vector<IrFunction> functions;
-    IrFunction main; // the top-level statements, run from top to bottom
+    IrFunction main;
 };
 
 std::string operandText(const Operand &o);

@@ -1,14 +1,4 @@
 // Owner: PS/CSC/23/0214 
-// Expressions: works out the type of every expression and checks operators,
-// names, array indexing, assignment and function calls.
-//
-// Operator rules 
-//   + - * /      int or float operands; float if either side is float
-//   %            int operands only
-//   < <= > >=    int or float operands; result bool
-//   == !=        two numbers, two bools or two strings; result bool
-//   && || !      bool operands; result bool
-//   unary -      int or float
 
 #include "semantic.h"
 
@@ -22,7 +12,7 @@ bool isZeroLiteral(const Expr* e) {
     return false;
 }
 
-}  // namespace
+}
 
 Type SemanticAnalyzer::checkExpr(const Expr* e) {
     Type t;
@@ -42,8 +32,6 @@ Type SemanticAnalyzer::checkExpr(const Expr* e) {
     return t;
 }
 
-// An expression whose value is used: it must be one value, not a whole
-// array and not the "result" of a void function.
 Type SemanticAnalyzer::valueOf(const Expr* e) {
     Type t = checkExpr(e);
     if (t.isArray()) {
@@ -90,7 +78,6 @@ Type SemanticAnalyzer::checkIndex(const IndexExpr& e) {
     }
     info_.symbols[&e] = s;
 
-    // A constant index can be checked now: int a[5]; a[5] = 1;
     if (e.index->kind == ExprKind::INT_LIT) {
         long long i = static_cast<const IntLiteral*>(e.index.get())->value;
         if (i < 0 || i >= s->type.arraySize) {
@@ -109,7 +96,6 @@ Type SemanticAnalyzer::checkUnary(const UnaryExpr& e) {
         if (!t.is(Type::Base::BOOL)) error(e, "operator '!' needs a bool, found " + t.name());
         return Type::boolean();
     }
-    // unary minus
     if (!t.isNumeric()) {
         error(e, "operator '-' needs an int or float, found " + t.name());
         return Type::error();
@@ -176,7 +162,6 @@ Type SemanticAnalyzer::checkBinary(const BinaryExpr& e) {
 }
 
 Type SemanticAnalyzer::checkAssign(const AssignExpr& e) {
-    // The parser only allows a name or an indexed name on the left.
     Type target = checkExpr(e.target.get());
     Type value = valueOf(e.value.get());
 

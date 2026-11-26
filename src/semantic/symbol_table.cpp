@@ -7,7 +7,7 @@ SymbolTable::SymbolTable() { scopes_.emplace_back(); }
 void SymbolTable::enterScope() { scopes_.emplace_back(); }
 
 void SymbolTable::exitScope() {
-    if (scopes_.size() > 1) scopes_.pop_back();  // the global scope never closes
+    if (scopes_.size() > 1) scopes_.pop_back();
 }
 
 void SymbolTable::beginFunction() {
@@ -30,7 +30,7 @@ Symbol* SymbolTable::declare(const Symbol& symbol) {
     auto owned = std::make_unique<Symbol>(symbol);
     owned->global = atGlobalScope() && symbol.kind != Symbol::Kind::FUNCTION;
     if (symbol.kind == Symbol::Kind::FUNCTION || owned->global) {
-        owned->irName = symbol.name;  // globals and functions are unique already
+        owned->irName = symbol.name;
     } else {
         owned->irName = uniqueName(symbol.name);
     }

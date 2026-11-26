@@ -1,5 +1,4 @@
 // Owner: PS/CSC/23/0212  (Phase 3, Part 4)
-// Statements: blocks and scopes, conditions, loops, return, print, read.
 
 #include "semantic.h"
 
@@ -10,7 +9,7 @@ void SemanticAnalyzer::checkStmt(const Stmt* s) {
             checkVarDecl(static_cast<const VarDecl&>(*s));
             break;
         case StmtKind::BLOCK:
-            checkBlock(static_cast<const BlockStmt&>(*s), /*newScope=*/true);
+            checkBlock(static_cast<const BlockStmt&>(*s), true);
             break;
         case StmtKind::IF: {
             auto& x = static_cast<const IfStmt&>(*s);
@@ -38,16 +37,12 @@ void SemanticAnalyzer::checkStmt(const Stmt* s) {
             checkRead(static_cast<const ReadStmt&>(*s));
             break;
         case StmtKind::EXPR: {
-            // A call may be used on its own even if it returns nothing (void);
-            // any other expression must be a proper value.
             const Expr* e = static_cast<const ExprStmt&>(*s).expr.get();
             if (e->kind == ExprKind::CALL) checkExpr(e);
             else valueOf(e);
             break;
         }
         case StmtKind::FUNC_DECL:
-            // The parser only allows functions at the top level, and
-            // analyze() handles those. Nothing to do here.
             break;
     }
 }
@@ -58,10 +53,6 @@ void SemanticAnalyzer::checkBlock(const BlockStmt& b, bool newScope) {
     if (newScope) symbols_.exitScope();
 }
 
-// The body of if/else/while/for. A declaration on its own there would
-// create a variable nobody can use, so it is not allowed:
-//     if (x) int y = 2;      error
-//     if (x) { int y = 2; }  fine
 void SemanticAnalyzer::checkBody(const Stmt* body, const char* owner) {
     if (!body) return;
     if (body->kind == StmtKind::VAR_DECL) {
@@ -79,7 +70,6 @@ void SemanticAnalyzer::checkCondition(const Expr* e, const char* owner) {
 }
 
 void SemanticAnalyzer::checkFor(const ForStmt& s) {
-    // The loop variable of "for (int i = 0; ...)" belongs to the loop only.
     symbols_.enterScope();
     checkStmt(s.init.get());
     if (s.condition) checkCondition(s.condition.get(), "for");
@@ -120,7 +110,6 @@ void SemanticAnalyzer::checkPrint(const PrintStmt& s) {
 }
 
 void SemanticAnalyzer::checkRead(const ReadStmt& s) {
-    // The parser guarantees the target is a name or an indexed name.
     Type t = checkExpr(s.target.get());
     if (t.isArray()) {
         error(*s.target, "can not read into the whole array; read into one element, e.g. read(a[i])");
