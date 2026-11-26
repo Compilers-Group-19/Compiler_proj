@@ -1,0 +1,16 @@
+a / b = 3
+a % b = 1
+-a / b = -3
+x / b = 3.5
+1 + 2 * 3 = 7
+(1 + 2) * 3 = 9
+2.5 * 2 = 5.0
+10 - 4 - 3 = 3
+smallest = -9223372036854775808
+t = true, !t = false
+ints equal floats: true
+strings equal: true false
+escapes:	Tab "quoted" \ done
+c = 11
+defaults: 0 0.0 false []
+p = 4, q = 4
