@@ -3,18 +3,18 @@
 Term project: a compiler for the class mini language, built in five phases.
 
 Group repository: COMPILER_GROUP_19
-Group Members:
+## Group Members:
 
-PS/CSC/23/0206 - khofiBoysty
-PS/CSC/23/0207 - Isaac20_7
-PS/CSC/23/0208 - oteng-codes
-PS/CSC/23/0209 -
-PS/CSC/23/0210 - Frimpong304
-PS/CSC/23/0211 - kweinor
-PS/CSC/23/0212 - koffyed
-PS/CSC/23/0213 - iconzym65
-PS/CSC/23/0214 -
-PS/CSC/23/0215 - gyampo1
+1.'PS/CSC/23/0206' - 'khofiBoysty'
+2.'PS/CSC/23/0207' - 'Isaac20-7'
+3.'PS/CSC/23/0208' - 'oteng-codes'
+4.'PS/CSC/23/0209' -
+5.'PS/CSC/23/0210' - 'Frimpong304'
+6.'PS/CSC/23/0211' - 'kweinor'
+7.'PS/CSC/23/0212' - 'koffyed'
+8.'PS/CSC/23/0213' - 'iconzym65'
+9.'PS/CSC/23/0214' -
+10.'PS/CSC/23/0215' - 'gyampo1'
 
 | Phase | Deliverable | Due | Status |
 |-------|-------------|-----|--------|
